@@ -1,0 +1,153 @@
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+OBSTACLES:
+
+I found my biggest obstacle in this was firstly getting started and secondly figuring out a way to process the string. I found the write-up written on the CS-31 website that gave an example of how to get started helpful, but the initial route I took didn't end up leading anywhere at all. What solved my issue was simply breaking up the problem into smaller and smaller pieces, just like the write-up suggested. As for string processing, that took some time to figure out but after comparing the example to the one written on the webpage, ideas flowed much easier. Overall, I found the best way to solve my issues in this assignment was to be able to break up the large spec with many tasks, into each individual tasks. Breaking the overall problem into a series of many tiny problems.
+
+
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+DESIGN:
+
+My "isValidPollFunction" worked by breaking up the the function into 
+functions that found more specific parts of the definition until we got to 
+the lowest level definition that could be directly tested for.
+
+For instance, where -> indicates one function used another: 
+isValidPollFunction -> isValidStateForecast -> (isValidPartyResult and 
+isValidStateCode)
+
+isValidStateCode was already given in the spec, however isValidPartyResult 
+was implemented as such, directly from the definition. Because I knew I 
+would be processing possibly very long stateforecasts with many party 
+results, I had a second argument which took in an int to treat as an 
+indexer and passed by reference how the indexer should advance. In 
+hindsight this may have been more complicated than just indexxing this 
+position variable in a future method
+
+bool isValidPartyResult(string partyResult, &int pos)
+
+	if party result has 2 characters
+		increase pos by two places
+		return if first character is a digit and 2nd is a letter
+	if party result has 3 characters
+		increase pos by three places
+		return if first two characters are digits and 3rd is a letter
+	else return false
+
+Now that we can test for both a state code existing and a party result 
+being valid, we can test to see if a state forecast is valid. We can take 
+advantage of the pass by reference in isValidPartyResult to process a 
+stateForecast that could have many party results inside. Here's how it was 
+implemented
+
+bool isValidStateForecast(string stateForecast)
+	if string does not begin with a valid state code
+		return false
+	starting with characters after the state code, until there are no more  remaining characters, repeatedly
+		if lone character at end of string
+			return false
+		if current and next characters are digits
+			test current character and next two characters as a valid party result
+			if fail, return false
+		else test if current character and next character are a valid party result
+			if fail, return false
+	if entire string is tested without failing, return true
+
+	It should be noted that the loop takes advantage of the 
+incrementing in isValidPartyResult. It does not test any character but 
+only the character immediately after a state code or after a previously 
+successful party result. This sometimes in an invalid party result will 
+leave us with an extra character at the end, that manually has to be 
+detected as making the forecast invalid which is what the "if character at 
+lone end of string" clause is for.
+
+Now that we can test state forecasts, we can test a poll string for being 
+valid. Here is how isValidPollString is implemented, it is quite simple 
+in comparison to isValidStateForecast
+
+bool isValidPollString(string pollString)
+
+	if pollstring is empty
+		return true
+	repeatedly
+		if at end of string
+			test if substring between beginning/last instance of comma and current character is a valid state forecast
+			if it isn't a valid forecast, return false
+		if detect comma
+			test if substring between beginning/last instance of a comma and current comma is a valid state forecast
+			if it isn't a valid forecast, return false
+		update last position of comma		   
+	once finished with string, if didn't fail any tests, return true
+
+We now have all of the tools needed to count seats. Count seats works by 
+checking for instances of the char given in party and finding the number 
+preceding that to total up the seats gained.
+
+int countSeats(string pollData, char party, int& seatcount)
+
+	if is invalid poll string
+		return 1
+	if given non letter party argument
+		return 2
+	if poll string is empty
+		set seat count to 0
+		return 0
+	repeatedly
+		if character in string matches character in party argument
+		check if character is preceded by 1 digit or 2 digits
+		if 2 digits
+			using tens place and ones place parse into  int, add to seatsSum
+		if 1 digit
+			using only ones place, parse into int, add to seatsSum
+
+	set seatcount to seatsSum
+	return 0
+
+
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+TEST DATA:
+    assert(isValidPollString("")); //Testing empty poll string
+    assert(isValidPollString("CT")); //Testing only state code
+    assert(isValidPollString("CT5D")); //Testing state forecast with one 
+result
+    assert(isValidPollString("CT5D4R")); //Testing state forecast with two 
+results
+    assert(!isValidPollString("5D")); //Testing only party result does not 
+register false pass
+    assert(isValidPollString("ne3r00d")); //testing all lowercase state 
+forecast
+    assert(isValidPollString("CT5D,NY9R16D1I,VT,ne3r00D")); //testing 
+multiple state forecasts
+    assert(!isValidPollString("C")); //testing single letter (aka just a 
+party code)
+    assert(!isValidPollString("CT5D,")); //testing edge case where k 
+indexer in function previously led to index out of bounds error
+    assert(!isValidPollString("CT%D")); //Testing inclusion of non-letters
+    int seats = -999;
+    assert(countSeats("", 'D', seats) == 0 && seats == 0); //Check empty 
+string sets seats to 0
+    seats = -999;
+    assert(countSeats("Q", 'D', seats) == 1 && seats == -999); //Checks 
+invalid pollstring returns 1 and does not change seats
+    seats = -999;
+    assert(countSeats("NY9R16D1I,Vt,NJ3d5r4D,KS4R", '%', seats) == 2 && 
+seats == -999); //Checks non-letter party code returns 2 and does not 
+change seats
+    seats = -999;
+    assert(countSeats("CT", 'D', seats) == 0 && seats == 0); //Checks only 
+statecode returns 0 seats
+    seats = -999;
+    assert(countSeats("CT5D4R", 'D', seats) == 0 && seats == 5); //Checks 
+sole forecast works
+    seats = -999;
+    assert(countSeats("CT5D4r", 'R', seats) == 0 && seats == 4); //Checks 
+mismatch in uppercase and lowercase still functions properly
+    seats = -999;
+    assert(countSeats("NJ3D5r4D", 'D', seats) == 0 && seats == 7); 
+//Checks if multiple occurrence of some party in result functions properly
+    seats = -999;
+    assert(countSeats("NJ3D5r4d", 'd', seats) == 0 && seats == 7); 
+//Checks if lowercase party code still functions
+    assert(countSeats("NY9R16D1I,Vt,NJ3d5r4D,KS4R", 'D', seats) == 0 && 
+seats == 23); //Checks full poll string with difference in capitalization 
+and repeat parties
+

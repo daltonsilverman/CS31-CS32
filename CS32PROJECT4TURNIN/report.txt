@@ -1,0 +1,40 @@
+Uncomplete Portions: None
+Bugs that I have not been able to fix: None (none identified)
+banned STL component: None:
+Test:
+treemm class: This was tested by inserting nunerous different types of 
+data, from string, to int, to movie, to test this class worked thoroughly. 
+I inserted the keys (2,2), 1(2), (3,2), 2(3), 2(4) to make sure that the 
+left and right branching systems worked, and then I called the find 
+function on 2 to have each value printed. A similar process was done for 
+other data types, as a means to test my operator< overload. I mainly used 
+the debugger for this process
+
+User Database: I used the names and emails of Carey and David inserted 
+into the spec and added a couple more friends emails to a .txt file, and 
+used the debugger to test that the load function worked correctly. I 
+tested with and without a line at the end.
+
+Movie Database: I used the example movies provided in the spec, along with 
+a couple of my favorites to a .txt file and ran the load function and 
+checked the debugger to make sure that the movies were ordered correctly 
+based on the alphabetical order of the strings given. I checked each 
+different map to make sure they were all entering as desired.
+
+User: I did this testing along with the user testing database at the same 
+time. Since my user database called my user constructor so many times, I 
+double checked to make sure that the constructor was working as needed. I 
+inserted my own email and friends, and added some of our favorite movies.  
+
+Movie: Same methodology of user, I found this testing to be easier done in 
+tandem with the movie class. On their own, I tested the various get 
+functions, trying different case-sensitivites to ensure that this class 
+was case insensitive for the data base.
+
+Recommender: I tried out the examples given out in the spec sheet for 
+matching input, as well as a couple using the test files that we were 
+given. I selected some of my favorite movies from the list, and tried 
+targetting different genres to see the validity of the algorithm. For 
+example I inputted Ryan Gosling love stories like "La La Land" and "The 
+Notebook", and tried to see if I would get other romantic comedies like 
+"When Harry Meets Sally"

@@ -1,0 +1,56 @@
+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+The main obstacle I had while trying to complete this project was trying 
+to figure out how I wanted the control flow to work involving the clause 
+of nurses and teachers receiving a different tax rate. I also had trouble 
+initially figuring out how I wanted to tax different portions of the 
+income by different amounts. I settled on creating a system in which 
+income was checked at the end of each specific tax bracket. I knew if the 
+income was greater than the bracket in its entirety, the amount added to 
+the total tax would be constant. If it was not greater than the threshold 
+of the bracket, I knew there would be no income entering the next tax 
+bracket and could tax the remaining income by the tax rate of that bracket.
+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+Test Data:
+Working name, income within first tax bracket, non-nurse/teacher, 0 
+children(Dalton Silverman, 30000, bartender, 0)
+
+Working name, income within second tax bracket, non-nurse/teacher, 0 
+children(Dalton Silverman, 100000, plumber, 0)
+
+Working name, income within second tax bracket, nurse, 0 children (Dalton 
+Silverman, 100000, nurse, 0)
+
+Working name, income within second tax bracket, teacher, 0 children, 
+checking to see both "teacher" and "nurse" activate new tax calculation 
+(Dalton Silverman, 100000, teacher, 0)
+
+Working name, income beyond 125000, non-nurse/teacher, 0 children (Dalton 
+Silverman, 180000, engineer, 0) - Did not work at first but resolved
+
+Debug case - income at exactly 125000 to help figure out calculation 
+issues at the time (Dalton Silverman, 125000, engineer, 0)
+
+Working name, income beyond 125000, nurse (do not have to test for teacher 
+as have previously found out both work together), 0 children (Dalton 
+Silverman, 130000, nurse, 0)
+
+Testing with children and income > 125000 (Dalton Silverman, 150000, 
+engineer, 2)
+
+Testing with children and income < 125000 (Dalton Silverman, 60000, 
+farmer, 3)
+
+Testing with children benefit causing tax to go down to the negatives and 
+return to 0 (Dalton Silverman, 20000, bartender, 10)
+
+Testing name with empty string ("", input stops)
+
+Testing with negative income(Dalton Silverman, -1000, input stops)
+
+Testing with empty string occupation (Dalton Silverman, 20000, "", input 
+stops)
+
+Testing with negative children (Dalton Silverman, 20000, bartender, -4)
+
+Testing with input greater than 2 decimal places (Dalton Silverman, 45343.34235, doctor, 3)
+

@@ -1,0 +1,15 @@
+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+In step 5 of this program, there is no checks that the amount of voters for each politician add up to the total number of voters answered in the first prompt. In my example, I initially said that 20 people 
+were survryed, and that 40 people voted for Gavin and -2 people voted for Brian. I therefore got the nonsensical output "200.0% say they will vote for Gavin. -10.0% say they will vote for Brian. Gavin is 
+predicted to win the election. The percentages calculated are obviously nonsensical as a negative percentage nor a percentage greater than 100% could exist in this context.
+
+In step 6, I switched the statement:  if (forGavin > forBrian) to: if (forGavin < forBrian). This resulted in the final results of the outcome to be switched in the output, as in if Gavin had more votes, 
+Brian was declared the winner, and vice versa.
+
+In step 7, I removed a semicolon from line 16, the statement: cout << "How many of them will vote for Gavin? ". In g++, I was told that a ; was expected before the start of the next line which I was notified 
+began was 'cin' and in xcode I was simply told that ; was expected at the end of the expression. The other error I made was I removed the top statement: #include <iostream>. In both compilers this removed the 
+notification about the missing semicolon. In xcode, I was told for every instance of cout, cin, ios, and endl that they were the use of an undeclared identifier. I was also given a warning for my line: using 
+namespace std; that "Using namespace refers to implicitly-defined namespace 'std'. In g++ I was given the same messages about cout, cin, ios, and endl being undeclared in this scope, and was given the 
+recommendation that they were included in the header <iostream> and to add the line "#include <iostream>"
+
+__________________________________________________________________________________________________________________________________________________________________________________________________________
